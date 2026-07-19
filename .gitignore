@@ -15,5 +15,9 @@ smart-bins.md
 smart-bins.json
 /out/
 
+# Release build output
+/release/
+*.spec
+
 # OS
 .DS_Store

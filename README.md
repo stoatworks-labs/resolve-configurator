@@ -54,6 +54,11 @@ session of the day uses `default_session_minutes`. Rules assume recorders are ja
 pip install -e .
 ```
 
+Prebuilt **standalone GUI apps** (no Python needed) are attached to each
+[GitHub Release](https://github.com/allansargeant/resolve-configurator/releases): macOS (Apple Silicon),
+Windows x64, and Linux x64, alongside the `wheel`/`sdist`. Intel-Mac users install via `pip`. The apps are
+unsigned, so first launch may need right-click → Open (macOS) or "More info → Run anyway" (Windows).
+
 ## Use — external CLI (Studio)
 
 ```
