@@ -1,0 +1,60 @@
+# resolve-configurator — example project configuration.
+# Pass with: resolve-configure sessions.csv --config project.example.toml
+# Relative asset paths are resolved relative to THIS file's directory.
+
+[project]
+# {date} expands to the earliest session date in the CSV (YYYY-MM-DD).
+name = "MyEvent {date}"
+create_if_missing = true
+# use_current = true   # build into the currently-open project instead of creating one
+
+[project.format]
+# The "extra metadata Resolve needs". frame_rate is a string (Resolve's own values: "24", "25", "23.976", ...).
+frame_rate = "25"
+width = 1920
+height = 1080
+
+[project.settings]
+# OPTIONAL passthrough: every key/value here is applied verbatim via Project.SetSetting().
+# This lets you set ANY project setting without a code change. Values are stringified.
+# "colorScienceMode" = "davinciYRGB"
+# "timelineWorkingLuminanceMode" = "SDR"
+# "videoMonitorFormat" = "HD 1080p 25"
+
+[sessions]
+# Session windows are derived: a session ends when the next one on the same theatre+day starts.
+# The LAST session of each theatre-day has no "next", so it gets this length:
+default_session_minutes = 90
+# Optional timeline name template. Available fields: {start} {presenter} {theatre} {date}.
+# Collisions are auto-disambiguated by appending [theatre date].
+timeline_name_template = "{start} - {presenter}"
+
+[drives]
+# Theatre -> record drive name, used in the smart-bin recipe (File Path contains <drive>).
+# Theatres not listed here still get bins/timelines; their recipe just omits the drive rule (and warns).
+Globe = "REC_GLOBE_01"
+Rose = "REC_ROSE_01"
+Swan = "REC_SWAN_01"
+
+# Asset manifest — each entry imports one file into a media-pool bin.
+#   scope = "global"      -> Assets/<bin>
+#   theatre = "Globe"     -> Globe/Assets/<bin>   (scope is implied "theatre")
+[[assets]]
+path = "assets.example/backgrounds/pip-blue.png"
+scope = "global"
+bin = "Backgrounds"
+
+[[assets]]
+path = "assets.example/backgrounds/pip-warm.png"
+scope = "global"
+bin = "Backgrounds"
+
+[[assets]]
+path = "assets.example/slides/holding.png"
+scope = "global"
+bin = "Slides"
+
+[[assets]]
+path = "assets.example/slides/globe-title.png"
+theatre = "Globe"
+bin = "Slides"

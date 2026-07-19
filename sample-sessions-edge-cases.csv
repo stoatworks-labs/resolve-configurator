@@ -1,0 +1,8 @@
+Date,Theatre,Start Time,presenter name,presenter email
+2026-08-06,Globe,15:00,Duplicate Row,duplicate@example.com
+2026-08-06,Globe,15:00,Duplicate Row,duplicate@example.com
+2026-08-07,Globe / Studio,10:00,O'Brien "Q",obrien@example.com
+2026-08-08,Rose,16:30,No Email On File,not-an-email
+2026-08-09,Rose,teatime,Bad Time Format,bad.time@example.com
+2026-08-10,,12:00,No Theatre Given,no.theatre@example.com
+2026-08-11,Swan,09:00,,missing.name@example.com
