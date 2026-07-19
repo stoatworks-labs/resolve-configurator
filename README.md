@@ -24,6 +24,17 @@ Date, Theatre, Start Time, presenter name, presenter email
 
 so the same show file drives both the upload side (Nextcloud) and the edit side (Resolve).
 
+## The desktop app
+
+![The Resolve Configurator window with a CSV and config loaded, ready to run](docs/screenshots/app-loaded.png)
+
+*Pick a sessions CSV and a project config, adjust the common settings, then Dry run or Apply.*
+
+![A dry run showing the planned media-pool tree: settings, an Assets bin, and per-theatre day/session bins](docs/screenshots/app-dry-run.png)
+
+*A Dry run previews the exact project format, media-pool bins, and per-session timelines before anything touches
+Resolve — real output from the app on the bundled sample data.*
+
 ## Why a "recipe" and not real smart bins?
 
 DaVinci Resolve's scripting API **cannot create smart bins** (confirmed for v20/v21 — you can create regular
