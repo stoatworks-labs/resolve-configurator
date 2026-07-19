@@ -19,6 +19,9 @@ dev = ["pytest>=7", "ruff>=0.5"]
 [project.scripts]
 resolve-configure = "resolve_configurator.cli:main"
 
+[project.gui-scripts]
+resolve-configure-gui = "resolve_configurator.gui:main"
+
 [tool.setuptools.packages.find]
 where = ["src"]
 

@@ -73,6 +73,18 @@ Try it now, no Resolve needed:
 resolve-configure sample-sessions.csv --config project.example.toml --dry-run --recipe-out out
 ```
 
+## Use — desktop GUI
+
+```
+resolve-configure-gui
+```
+
+A small Tkinter window: pick the CSV and config, adjust the common settings (project name, frame rate,
+resolution, default session length), then **Dry run** to preview the plan tree or **Apply to Resolve** to build
+it. The output pane shows exactly what the CLI would print. Everything except the actual apply works with no
+Resolve installed, so you can prepare and preview a show anywhere. Needs Tk (bundled with python.org builds; on
+Homebrew Python install `python-tk`).
+
 ## Use — in-app Scripts menu (free or Studio)
 
 The same code runs from inside Resolve. Make the `resolve_configurator` package importable on Resolve's
