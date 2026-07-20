@@ -26,14 +26,15 @@ so the same show file drives both the upload side (Nextcloud) and the edit side 
 
 ## The desktop app
 
-![The Resolve Configurator window with a CSV and config loaded, ready to run](docs/screenshots/app-loaded.png)
+![The Resolve Configurator editor: an editable sessions table, project settings, and per-theatre asset panels](docs/screenshots/app-loaded.png)
 
-*Pick a sessions CSV and a project config, adjust the common settings, then Dry run or Apply.*
+*Edit sessions row by row (or Load a CSV), set the project format, then Sync theatres and browse background /
+PiP / slide images per theatre. Grey-on-grey to match Resolve.*
 
-![A dry run showing the planned media-pool tree: settings, an Assets bin, and per-theatre day/session bins](docs/screenshots/app-dry-run.png)
+![A dry run showing the planned media-pool tree in the output pane](docs/screenshots/app-dry-run.png)
 
-*A Dry run previews the exact project format, media-pool bins, and per-session timelines before anything touches
-Resolve — real output from the app on the bundled sample data.*
+*A Dry run previews the exact project format, media-pool bins, per-theatre asset bins, and per-session
+timelines in the output pane before anything touches Resolve — real output on the bundled sample data.*
 
 ## Why a "recipe" and not real smart bins?
 
@@ -95,11 +96,19 @@ resolve-configure sample-sessions.csv --config project.example.toml --dry-run --
 resolve-configure-gui
 ```
 
-A small Tkinter window: pick the CSV and config, adjust the common settings (project name, frame rate,
-resolution, default session length), then **Dry run** to preview the plan tree or **Apply to Resolve** to build
-it. The output pane shows exactly what the CLI would print. Everything except the actual apply works with no
-Resolve installed, so you can prepare and preview a show anywhere. Needs Tk (bundled with python.org builds; on
-Homebrew Python install `python-tk`).
+A Tkinter editor (styled grey-on-grey to sit next to Resolve) that builds the whole show without touching a
+file by hand:
+
+- **Sessions** — edit rows directly (Add row / delete / Clear), or **Load CSV** to import an existing show, or
+  **Export CSV** to save one out.
+- **Project settings** — project name, frame rate, resolution, default session length; **Load/Save config**
+  round-trips a `project.toml` for the CLI.
+- **Assets** — click **Sync theatres from sessions** to get a panel per theatre (plus a Global panel), each with
+  a record-drive field and **Backgrounds / PiP / Slides** image lists you populate with a native file browser.
+- **Dry run** previews the plan in the output pane; **Apply to Resolve** builds it.
+
+Everything except the actual apply works with no Resolve installed, so you can prepare and preview a show
+anywhere. Needs Tk (bundled with python.org builds; on Homebrew Python install `python-tk`).
 
 ## Use — in-app Scripts menu (free or Studio)
 
