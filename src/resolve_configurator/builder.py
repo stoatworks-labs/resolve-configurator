@@ -46,6 +46,19 @@ class Plan:
 
 
 def build_plan(show: Show, config: Config) -> Plan:
+    """Turn a show into the full folder/timeline/media structure to create.
+
+    Pure: no Resolve dependency and no I/O, which is what lets a dry run print
+    exactly what an apply would do, and lets tests assert on the result without
+    an application running. Keep it that way -- put the I/O in ``apply_plan``.
+
+    Rows that don't fully parse still produce output rather than failing the
+    build, and each leaves a gap that is invisible in the result itself:
+    an unparseable start time yields a timeline named from the raw value and no
+    timecode rule, a missing theatre yields an ``untitled`` bin, and a theatre
+    absent from ``[drives]`` yields a recipe with no File Path rule. All of them
+    are appended to ``Plan.warnings`` -- callers must surface those.
+    """
     warnings: list[str] = []
     project_name = _expand_name(config.project_name, show)
 
@@ -119,6 +132,17 @@ def _get_top(root: list[FolderNode], name: str) -> FolderNode:
 
 
 def _timeline_name(template, theatre, day, window, used: set[str]) -> str:
+    """Render one timeline name and guarantee it is unique within the project.
+
+    Resolve will happily hold two timelines with the same name, which is
+    miserable for an editor, so collisions are disambiguated in two stages:
+    first by appending ``[theatre date]`` (usually enough, and meaningful),
+    then by a numeric suffix if that still clashes.
+
+    Empty fields become ``no-time`` / ``no-presenter`` rather than collapsing
+    into an unreadable name. ``used`` is mutated -- callers share one set across
+    the whole plan.
+    """
     session = window.session
     base = template.format(
         start=session.start_time or "no-time",
@@ -188,7 +212,19 @@ def _render_node(node: FolderNode, depth: int, lines: list[str]) -> None:
 # --------------------------------------------------------------------------- #
 
 def apply_plan(plan: Plan, backend, log=print) -> None:
-    """Execute *plan* against a Resolve backend (see resolve_api.ResolveBackend)."""
+    """Execute *plan* against a Resolve backend (see resolve_api.ResolveBackend).
+
+    The only part of this module that touches Resolve. It walks the same ``Plan``
+    a dry run prints, so what you saw is what gets built.
+
+    Re-running is safe: folders are found-or-created and timelines already
+    present are skipped by name, so adding sessions to the CSV and running again
+    creates only the new ones.
+
+    Media files that no longer exist on disk are skipped silently
+    (``_apply_node`` filters on ``p.exists()``), so a moved asset produces an
+    empty bin rather than an error.
+    """
     backend.select_project(plan)
     applied = backend.apply_settings(plan.settings)
     log(f"Applied {applied} project setting(s).")

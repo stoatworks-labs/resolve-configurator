@@ -27,7 +27,17 @@ class Result:
 
 
 def execute(rows, config, *, dry_run: bool, recipe_out: str = ".", log=print) -> Result:
-    """Run the build against a loaded config. Never raises for a missing Resolve."""
+    """Run the build against a loaded config. Never raises for a missing Resolve.
+
+    The order matters: the smart-bin recipes are written BEFORE Resolve is
+    contacted, so ``--dry-run`` still produces them and an unreachable Resolve
+    doesn't cost you the one output that needs no application at all.
+
+    A failed connection is not an error. It logs why (external scripting needs
+    Resolve Studio and a running instance, or run it from Resolve's own Scripts
+    menu) and falls back to printing the plan -- so a user who forgot to start
+    Resolve gets a useful dry run rather than a traceback.
+    """
     show = build_show(rows, config.default_session_minutes)
     plan = build_plan(show, config)
 
