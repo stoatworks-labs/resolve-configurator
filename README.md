@@ -53,6 +53,14 @@ once, by hand. Each session's rules are:
 The timecode window is **derived**: a session ends when the next one on that theatre/day starts; the last
 session of the day uses `default_session_minutes`. Rules assume recorders are jammed to **time-of-day timecode**.
 
+## Documentation
+
+| Doc | Contents |
+|---|---|
+| [docs/USER-GUIDE.md](docs/USER-GUIDE.md) | Dry-running, derived session windows, the timecode assumption, troubleshooting |
+| [docs/API.md](docs/API.md) | CLI flags, the full TOML schema, the shared CSV contract, naming rules, the recipe format |
+| [docs/DEVELOPING.md](docs/DEVELOPING.md) | The two-repo CSV contract, the dry-run test pattern, deliberate behaviours |
+
 ## Requirements
 
 - **Python 3.11+** (uses the stdlib `tomllib`; no third-party runtime dependencies).
