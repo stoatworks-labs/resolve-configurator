@@ -5,7 +5,7 @@
 > Review it yourself before relying on it in production, same as you would for any code.
 
 Scaffold a **DaVinci Resolve** project for a multi-theatre event from the *same CSV* the
-[nc-filedropbatch](https://github.com/allansargeant/nc-filedropbatch) Nextcloud app uses to collect presenter
+[nc-filedropbatch](https://github.com/stoatworks-labs/nc-filedropbatch) Nextcloud app uses to collect presenter
 uploads. Point it at your sessions list plus a small config (frame rate, resolution, record-drive map, asset
 manifest) and it builds:
 
@@ -75,7 +75,7 @@ pip install -e .
 ```
 
 Prebuilt **standalone GUI apps** (no Python needed) are attached to each
-[GitHub Release](https://github.com/allansargeant/resolve-configurator/releases): macOS (Apple Silicon),
+[GitHub Release](https://github.com/stoatworks-labs/resolve-configurator/releases): macOS (Apple Silicon),
 Windows x64, and Linux x64, alongside the `wheel`/`sdist`. Intel-Mac users install via `pip`. The apps are
 unsigned, so first launch may need right-click → Open (macOS) or "More info → Run anyway" (Windows).
 

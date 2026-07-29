@@ -21,7 +21,7 @@ nc-filedropbatch    resolve-configurator
 **That shared schema is the contract.**
 
 > **If you change how the CSV is interpreted here, check
-> [`nc-filedropbatch`](https://github.com/allansargeant/nc-filedropbatch) — a separate repo, a
+> [`nc-filedropbatch`](https://github.com/stoatworks-labs/nc-filedropbatch) — a separate repo, a
 > PHP/Nextcloud app — for the other half.** Diverging on column meaning breaks the workflow in a
 > way **neither repo's tests would catch on their own.**
 

@@ -11,7 +11,7 @@ GUI, and Resolve's own Scripts menu). This is what to do with it, and what to ch
 ## 1. The idea: one CSV, two tools
 
 The same sessions CSV drives this tool **and**
-[nc-filedropbatch](https://github.com/allansargeant/nc-filedropbatch), the Nextcloud app that
+[nc-filedropbatch](https://github.com/stoatworks-labs/nc-filedropbatch), the Nextcloud app that
 collects presenter uploads for the same event.
 
 ```

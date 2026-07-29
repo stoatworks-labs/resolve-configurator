@@ -108,7 +108,7 @@ Setting `theatre` implies `scope = "theatre"`.
 ## 3. The session CSV contract
 
 > **The same CSV drives this tool and
-> [nc-filedropbatch](https://github.com/allansargeant/nc-filedropbatch)**, the Nextcloud app that
+> [nc-filedropbatch](https://github.com/stoatworks-labs/nc-filedropbatch)**, the Nextcloud app that
 > collects presenter uploads for the same event.
 >
 > ```
