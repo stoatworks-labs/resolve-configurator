@@ -78,3 +78,10 @@ instance. Keep it working, and prefer extending it over adding tests that need t
 ## 6. Related
 
 - **`nc-filedropbatch`** — the Nextcloud app at the other end of the shared CSV.
+
+## Diagnostics
+
+Log via `diag.log`, not `print`. `diag.init(...)` goes before anything that can fail. Tk
+apps must also call `diag.install_tk_excepthook(root)` before any callback can run —
+Tkinter swallows callback exceptions, so without it a fault in a button handler never
+reaches the crash handler. See [docs/diagnostics.md](docs/diagnostics.md).

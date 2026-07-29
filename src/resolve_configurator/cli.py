@@ -10,6 +10,7 @@ from .config import ConfigError, load_config
 from .core import execute
 from .csv_reader import CsvError, read_csv
 from .resolve_api import ResolveError
+from . import diag
 
 
 def run(
@@ -57,8 +58,28 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+DIAG_APP = "resolve-configurator"
+DIAG_ENV_PREFIX = "RESOLVE_CONFIGURATOR"
+
+
 def main(argv: list[str] | None = None) -> int:
+    raw = list(sys.argv[1:] if argv is None else argv)
+
+    # Handled before argparse, deliberately: the real parser requires a CSV and
+    # a config file, and someone asking for diagnostics has just had a run fail
+    # and has neither to hand.
+    if "--collect-diagnostics" in raw:
+        diag.init(app=DIAG_APP, env_prefix=DIAG_ENV_PREFIX, version=__version__)
+        # stdout, so it can be used in a script; logging went to stderr.
+        print(diag.collect_diagnostics())
+        return 0
+
     args = build_parser().parse_args(argv)
+
+    # Before anything that can fail, so a failure is logged and captured.
+    diag.init(app=DIAG_APP, env_prefix=DIAG_ENV_PREFIX,
+              version=__version__, config=vars(args))
+
     try:
         return run(
             args.csv,
