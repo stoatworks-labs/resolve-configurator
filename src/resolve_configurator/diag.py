@@ -28,7 +28,7 @@ import threading
 import time
 import traceback
 from collections import deque
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 #: Identifies the document shape to anything reading it later.
@@ -542,9 +542,9 @@ def _write_json(directory: Path, name: str, value: object) -> Path | None:
 
 
 def _now_iso() -> str:
-    return datetime.now(timezone.utc).isoformat(timespec="milliseconds")
+    return datetime.now(UTC).isoformat(timespec="milliseconds")
 
 
 def _stamp_compact() -> str:
     """``20260729T141500Z`` — safe in a filename on Windows, where ``:`` is not."""
-    return datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    return datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")

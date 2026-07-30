@@ -5,12 +5,11 @@ from __future__ import annotations
 import argparse
 import sys
 
-from . import __version__
+from . import __version__, diag
 from .config import ConfigError, load_config
 from .core import execute
 from .csv_reader import CsvError, read_csv
 from .resolve_api import ResolveError
-from . import diag
 
 
 def run(
