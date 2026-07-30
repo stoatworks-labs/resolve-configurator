@@ -44,14 +44,80 @@ jobs:
           python-version: "3.12"
       - run: pip install . pyinstaller
       - run: python packaging/build_binary.py ${{ matrix.target }}
+
+      - name: Installers (macOS)
+        if: runner.os == 'macOS'
+        shell: bash
+        # build_binary.py leaves its PyInstaller output in dist/ after zipping,
+        # so the .app is right there to wrap. A zipped .app is not an install
+        # experience; the .pkg puts it in /Applications and the .dmg lets people
+        # drag it. Ad-hoc signed first — PyInstaller's bundle is unsigned, and
+        # an unsigned bundle is refused with "is damaged" on Apple Silicon.
+        run: |
+          source scripts/release-lib.sh
+          version="${GITHUB_REF_NAME#v}"
+          case "$version" in [0-9]*) ;; *) version="0.0.0" ;; esac
+          rl_init "Resolve Configurator" resolve-configurator "$version" \
+            com.stoatworks.resolve-configurator "$PWD/release"
+          app="dist/resolve-configurator-gui.app"
+          if [ -d "$app" ]; then
+            rl_adhoc_sign "$app"
+            rl_dmg "${{ matrix.target }}" dist --app "resolve-configurator-gui.app"
+            rl_pkg "${{ matrix.target }}" dist --app "resolve-configurator-gui.app"
+          else
+            echo "no .app bundle found in dist/, skipping installers"
+          fi
+
       - uses: actions/upload-artifact@v4
         with:
           name: gui-${{ matrix.target }}
-          path: release/*.zip
+          path: |
+            release/*.zip
+            release/*.dmg
+            release/*.pkg
+
+  windows-installers:
+    name: Windows installer
+    needs: binaries
+    runs-on: ubuntu-latest
+    # makensis cross-compiles, so the Windows installer is wrapped here from
+    # the zip the Windows job uploaded rather than depending on whatever NSIS
+    # is present on the Windows image.
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Install NSIS
+        run: sudo apt-get update && sudo apt-get install -y nsis
+
+      - name: Build installer
+        shell: bash
+        run: |
+          source scripts/release-lib.sh
+          version="${GITHUB_REF_NAME#v}"
+          case "$version" in [0-9]*) ;; *) version="0.0.0" ;; esac
+          rl_init "Resolve Configurator" resolve-configurator "$version" \
+            com.stoatworks.resolve-configurator "$PWD/installers"
+          zip="$(find artifacts -name "resolve-configurator-gui-windows-x64.zip" | head -1)"
+          if [ -z "$zip" ]; then echo "no Windows artefact, nothing to do"; exit 0; fi
+          stage="$RUNNER_TEMP/stage-win"
+          rm -rf "$stage"; mkdir -p "$stage"
+          unzip -q "$zip" -d "$stage"
+          rl_nsis windows-x64 "$stage" --gui "resolve-configurator-gui.exe"
+          ls -l installers
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: resolve-configurator-windows-installer
+          path: installers/*
+          if-no-files-found: warn
 
   release:
     name: Publish GitHub Release
-    needs: [wheels, binaries]
+    needs: [wheels, binaries, windows-installers]
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     steps:
