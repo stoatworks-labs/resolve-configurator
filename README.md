@@ -24,6 +24,53 @@ Date, Theatre, Start Time, presenter name, presenter email
 
 so the same show file drives both the upload side (Nextcloud) and the edit side (Resolve).
 
+<!-- downloads:start -->
+
+## Download
+
+**[v0.1.1](https://github.com/stoatworks-labs/resolve-configurator/releases/tag/v0.1.1)** — prebuilt for macOS, Windows and Linux. Pick your platform:
+
+<details>
+<summary><b>macOS</b> — Apple Silicon</summary>
+
+| Build | Download | Size |
+| --- | --- | --- |
+| Apple Silicon · .dmg disk image | [`resolve-configurator-0.1.1-macos-arm64.dmg`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.1/resolve-configurator-0.1.1-macos-arm64.dmg) | 24 MB |
+| Apple Silicon · .pkg installer | [`resolve-configurator-0.1.1-macos-arm64.pkg`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.1/resolve-configurator-0.1.1-macos-arm64.pkg) | 9.8 MB |
+| Apple Silicon · .zip archive | [`resolve-configurator-gui-macos-arm64.zip`](https://github.com/stoatworks-labs/resolve-configurator/releases/latest/download/resolve-configurator-gui-macos-arm64.zip) | 20 MB |
+
+</details>
+
+<details>
+<summary><b>Windows</b> — x64</summary>
+
+| Build | Download | Size |
+| --- | --- | --- |
+| x64 · .exe installer | [`resolve-configurator-0.1.1-windows-x64-setup.exe`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.1/resolve-configurator-0.1.1-windows-x64-setup.exe) | 11 MB |
+| x64 · .zip archive | [`resolve-configurator-gui-windows-x64.zip`](https://github.com/stoatworks-labs/resolve-configurator/releases/latest/download/resolve-configurator-gui-windows-x64.zip) | 11 MB |
+
+</details>
+
+<details>
+<summary><b>Linux</b> — x64</summary>
+
+| Build | Download | Size |
+| --- | --- | --- |
+| x64 · .zip archive | [`resolve-configurator-gui-linux-x64.zip`](https://github.com/stoatworks-labs/resolve-configurator/releases/latest/download/resolve-configurator-gui-linux-x64.zip) | 24 MB |
+
+</details>
+
+Also in this release:
+
+- [`resolve_configurator-0.1.1-py3-none-any.whl`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.1/resolve_configurator-0.1.1-py3-none-any.whl) — Python wheel (pip install), 37 KB
+- [`resolve_configurator-0.1.1.tar.gz`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.1/resolve_configurator-0.1.1.tar.gz) — Source tarball, 39 KB
+
+All builds, checksums and release notes: [github.com/stoatworks-labs/resolve-configurator/releases](https://github.com/stoatworks-labs/resolve-configurator/releases).
+
+These builds are unsigned, so macOS and Windows each warn once on first launch — see [Unsigned builds — macOS Gatekeeper & Windows SmartScreen](#unsigned-builds--macos-gatekeeper--windows-smartscreen) for the one-time fix.
+
+<!-- downloads:end -->
+
 ## The desktop app
 
 ![The Resolve Configurator editor: an editable sessions table, project settings, and per-theatre asset panels](docs/screenshots/app-loaded.png)
@@ -77,7 +124,7 @@ pip install -e .
 Prebuilt **standalone GUI apps** (no Python needed) are attached to each
 [GitHub Release](https://github.com/stoatworks-labs/resolve-configurator/releases): macOS (Apple Silicon),
 Windows x64, and Linux x64, alongside the `wheel`/`sdist`. Intel-Mac users install via `pip`. The apps are
-unsigned, so first launch may need right-click → Open (macOS) or "More info → Run anyway" (Windows).
+unsigned — see [Unsigned builds](#unsigned-builds--macos-gatekeeper--windows-smartscreen) for the fix.
 
 ## Use — external CLI (Studio)
 
@@ -165,6 +212,22 @@ pip install -e '.[dev]'
 pytest -q          # unit + dry-run tests, no Resolve needed
 ruff check .
 ```
+
+## Unsigned builds — macOS Gatekeeper & Windows SmartScreen
+
+The release binaries are **not code-signed or notarized** — that needs paid Apple
+and Microsoft developer certificates this project doesn't carry. The downloads are
+fine; the OS just can't identify the publisher, so it warns you the first time.
+
+- **macOS** — *"cannot be opened because the developer cannot be verified"*.
+  Right-click the app → **Open** → **Open**, or clear the flag:
+  `xattr -dr com.apple.quarantine "/Applications/Resolve Configurator.app"`
+- **Windows** — SmartScreen shows *"Windows protected your PC"* →
+  **More info** → **Run anyway**.
+- **Linux** — no signing gate.
+
+Per-artifact steps, self-signing and checksum verification:
+**[docs/UNSIGNED.md](docs/UNSIGNED.md)**.
 
 ## License
 
