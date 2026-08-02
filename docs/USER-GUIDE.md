@@ -1,4 +1,4 @@
-# Resolve Configurator — User Guide
+# Resolve Configurator user guide
 
 Scaffolding a DaVinci Resolve project for a multi-theatre event — bins, timelines, asset
 imports and smart-bin recipes — from the session CSV.
@@ -8,8 +8,7 @@ GUI, and Resolve's own Scripts menu). This is what to do with it, and what to ch
 
 ---
 
-## 1. The idea: one CSV, two tools
-
+## The idea: one CSV, two tools
 The same sessions CSV drives this tool **and**
 [nc-filedropbatch](https://github.com/stoatworks-labs/nc-filedropbatch), the Nextcloud app that
 collects presenter uploads for the same event.
@@ -35,7 +34,22 @@ fix and retry.
 
 ---
 
-## 2. Always dry-run first
+## The app
+
+![The Resolve Configurator window: the session table at the top, project settings below it, the per-theatre asset lists, and the dry-run output filling the bottom pane.](screenshots/app-loaded.png)
+
+Everything comes off one screen: load the session CSV, set the project name, frame rate and
+resolution, attach backgrounds and PiP images per theatre, then either **Dry run** or **Apply to
+Resolve**.
+
+---
+
+## Always dry-run first
+
+![Dry-run output: the project name with create_if_missing, the settings that will be applied, and the media-pool tree it intends to build.](screenshots/app-dry-run.png)
+
+*The dry run prints the whole plan — the resolved project name, every setting, and the bin tree
+down to each session — without touching Resolve.*
 
 ```bash
 resolve-configure sessions.csv --config project.toml --dry-run
@@ -49,8 +63,7 @@ it near a real project.
 
 ---
 
-## 3. ⚠ Session end times are derived, not read
-
+## Session end times are derived, not read
 The CSV has a start time and no end time. **A session ends when the next one on that theatre and
 day starts.**
 
@@ -65,8 +78,7 @@ If the derived windows look wrong, that's the rule to check first — not the co
 
 ---
 
-## 4. ⚠ The smart-bin rules assume time-of-day timecode
-
+## The smart-bin rules assume time-of-day timecode
 Resolve's scripting API **cannot create smart bins**, and at build time the recordings don't
 exist in the media pool anyway. So the tool writes `smart-bins.md` and `smart-bins.json` with the
 exact rules to recreate each one **by hand, once**:
@@ -85,8 +97,7 @@ Confirm timecode jam **before** the event, not when you're looking for a missing
 
 ---
 
-## 5. ⚠ Read the run summary
-
+## Read the run summary
 Three kinds of imperfect row still produce output, on purpose — a partial build is more useful
 than a refusal — and each one leaves a gap that looks fine until you use it:
 
@@ -101,8 +112,7 @@ still import cleanly and quietly over-match.**
 
 ---
 
-## 6. Assets and project settings
-
+## Assets and project settings
 **Asset paths in the config are relative to the config file**, not to where you run the command.
 
 **`[project.settings]` is a verbatim passthrough** to Resolve's `SetSetting()` — anything you put
@@ -116,8 +126,7 @@ names before suspecting the tool.
 
 ---
 
-## 7. Re-running
-
+## Re-running
 **Safe.** Bins are found-or-created, and timelines already present are skipped by name. Add
 sessions to the CSV, run again, and only the new ones are created.
 
@@ -125,8 +134,7 @@ Timeline name collisions are auto-disambiguated by appending `[theatre date]`.
 
 ---
 
-## 8. Requirements worth knowing before the day
-
+## Requirements worth knowing before the day
 - **Python 3.11+** — no third-party runtime dependencies.
 - **DaVinci Resolve Studio** to apply a build from outside Resolve. External scripting is a
   Studio feature. **The free version can only run this from Resolve's own Workspace → Scripts
@@ -134,22 +142,21 @@ Timeline name collisions are auto-disambiguated by appending `[theatre date]`.
 
 ---
 
-## 9. Troubleshooting
-
+## Troubleshooting
 | Symptom | Cause |
 |---|---|
-| **"The CSV is empty" / missing column** | Header names don't match. Nothing was built (§1). |
-| **Session windows longer than the talks** | Windows are derived from the next session's start — gaps get absorbed (§3). |
-| **One session per day is the wrong length** | That's the last one, using `default_session_minutes` (§3). |
-| **A smart bin is empty in Resolve** | Recorders probably aren't on time-of-day timecode (§4). |
-| **A smart bin over-matches** | Its recipe is missing the drive or timecode rule — check the run summary (§5). |
-| **A bin called `untitled`** | A row with no theatre (§5). |
-| **A timeline named from a raw time string** | Unparseable start time; it also has no timecode rule (§5). |
-| **`09:30` became `09-30`** | Intentional — `:` is replaced, not stripped, so names never collide (§1). |
-| **An asset wasn't imported** | Paths are relative to the **config file**, not the CWD (§6). |
-| **A project setting didn't apply** | `[project.settings]` is unvalidated passthrough; Resolve ignored it (§6). |
-| **External CLI can't reach Resolve** | External scripting needs Resolve **Studio** (§8). |
-| **Re-ran and nothing happened** | Existing timelines are skipped by name — that's the safe behaviour (§7). |
+| **"The CSV is empty" / missing column** | Header names don't match. Nothing was built ([The idea: one CSV, two tools](#the-idea-one-csv-two-tools)). |
+| **Session windows longer than the talks** | Windows are derived from the next session's start — gaps get absorbed ([Session end times are derived, not read](#session-end-times-are-derived-not-read)). |
+| **One session per day is the wrong length** | That's the last one, using `default_session_minutes` ([Session end times are derived, not read](#session-end-times-are-derived-not-read)). |
+| **A smart bin is empty in Resolve** | Recorders probably aren't on time-of-day timecode ([The smart-bin rules assume time-of-day timecode](#the-smart-bin-rules-assume-time-of-day-timecode)). |
+| **A smart bin over-matches** | Its recipe is missing the drive or timecode rule — check the run summary ([Read the run summary](#read-the-run-summary)). |
+| **A bin called `untitled`** | A row with no theatre ([Read the run summary](#read-the-run-summary)). |
+| **A timeline named from a raw time string** | Unparseable start time; it also has no timecode rule ([Read the run summary](#read-the-run-summary)). |
+| **`09:30` became `09-30`** | Intentional — `:` is replaced, not stripped, so names never collide ([The idea: one CSV, two tools](#the-idea-one-csv-two-tools)). |
+| **An asset wasn't imported** | Paths are relative to the **config file**, not the CWD ([Assets and project settings](#assets-and-project-settings)). |
+| **A project setting didn't apply** | `[project.settings]` is unvalidated passthrough; Resolve ignored it ([Assets and project settings](#assets-and-project-settings)). |
+| **External CLI can't reach Resolve** | External scripting needs Resolve **Studio** ([Requirements worth knowing before the day](#requirements-worth-knowing-before-the-day)). |
+| **Re-ran and nothing happened** | Existing timelines are skipped by name — that's the safe behaviour ([Re-running](#re-running)). |
 
 ---
 
