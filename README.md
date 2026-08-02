@@ -35,8 +35,8 @@ so the same show file drives both the upload side (Nextcloud) and the edit side 
 
 | Build | Download | Size |
 | --- | --- | --- |
-| Apple Silicon · .dmg disk image | [`resolve-configurator-0.1.1-macos-arm64.dmg`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.1/resolve-configurator-0.1.1-macos-arm64.dmg) | 24 MB |
-| Apple Silicon · .pkg installer | [`resolve-configurator-0.1.1-macos-arm64.pkg`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.1/resolve-configurator-0.1.1-macos-arm64.pkg) | 9.8 MB |
+| Apple Silicon · .dmg disk image | [`resolve-configurator-0.1.1-macos-arm64.dmg`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.2/resolve-configurator-0.1.2-macos-arm64.dmg) | 23 MB |
+| Apple Silicon · .pkg installer | [`resolve-configurator-0.1.1-macos-arm64.pkg`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.2/resolve-configurator-0.1.2-macos-arm64.pkg) | 9.4 MB |
 | Apple Silicon · .zip archive | [`resolve-configurator-gui-macos-arm64.zip`](https://github.com/stoatworks-labs/resolve-configurator/releases/latest/download/resolve-configurator-gui-macos-arm64.zip) | 20 MB |
 
 </details>
@@ -46,7 +46,7 @@ so the same show file drives both the upload side (Nextcloud) and the edit side 
 
 | Build | Download | Size |
 | --- | --- | --- |
-| x64 · .exe installer | [`resolve-configurator-0.1.1-windows-x64-setup.exe`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.1/resolve-configurator-0.1.1-windows-x64-setup.exe) | 11 MB |
+| x64 · .exe installer | [`resolve-configurator-0.1.1-windows-x64-setup.exe`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.2/resolve-configurator-0.1.2-windows-x64-setup.exe) | 11 MB |
 | x64 · .zip archive | [`resolve-configurator-gui-windows-x64.zip`](https://github.com/stoatworks-labs/resolve-configurator/releases/latest/download/resolve-configurator-gui-windows-x64.zip) | 11 MB |
 
 </details>
@@ -62,8 +62,8 @@ so the same show file drives both the upload side (Nextcloud) and the edit side 
 
 Also in this release:
 
-- [`resolve_configurator-0.1.1-py3-none-any.whl`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.1/resolve_configurator-0.1.1-py3-none-any.whl) — Python wheel (pip install), 37 KB
-- [`resolve_configurator-0.1.1.tar.gz`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.1/resolve_configurator-0.1.1.tar.gz) — Source tarball, 39 KB
+- [`resolve_configurator-0.1.1-py3-none-any.whl`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.2/resolve_configurator-0.1.2-py3-none-any.whl) — Python wheel (pip install), 37 KB
+- [`resolve_configurator-0.1.1.tar.gz`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.2/resolve_configurator-0.1.2.tar.gz) — Source tarball, 39 KB
 
 All builds, checksums and release notes: [github.com/stoatworks-labs/resolve-configurator/releases](https://github.com/stoatworks-labs/resolve-configurator/releases).
 
