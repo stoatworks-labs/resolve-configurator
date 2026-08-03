@@ -5,4 +5,5 @@ Public entry points:
     resolve_configurator.builder.build_plan / apply_plan
 """
 
-__version__ = "0.1.0"
+#: The one place the version is written down; pyproject.toml reads it.
+__version__ = "0.1.2"

@@ -1,10 +1,17 @@
+[tool.setuptools.dynamic]
+version = { attr = "resolve_configurator.__version__" }
+
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "resolve-configurator"
-version = "0.1.2"
+# Read from resolve_configurator.__version__ so there is exactly one place to
+# bump. These were two places and had already drifted: this file said 0.1.2 at
+# the v0.1.2 tag while the package said 0.1.0, so `--version` and the About
+# output both reported a release that was two behind.
+dynamic = ["version"]
 description = "Scaffold a DaVinci Resolve project (bins, timelines, media, smart-bin recipes) from a theatre/session CSV."
 readme = "README.md"
 requires-python = ">=3.11"
