@@ -10,6 +10,7 @@ from .config import ConfigError, load_config
 from .core import execute
 from .csv_reader import CsvError, read_csv
 from .resolve_api import ResolveError
+from .about_dialog import about_text
 
 
 def run(
@@ -54,6 +55,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="Directory for smart-bins.md / smart-bins.json (default: current dir).",
     )
     parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
+    parser.add_argument(
+        "--about",
+        action="store_true",
+        help="Show the version, the documentation links and how to support the work.",
+    )
     return parser
 
 
@@ -67,6 +73,13 @@ def main(argv: list[str] | None = None) -> int:
     # Handled before argparse, deliberately: the real parser requires a CSV and
     # a config file, and someone asking for diagnostics has just had a run fail
     # and has neither to hand.
+    # Same reason as --collect-diagnostics below: the real parser requires a CSV
+    # and a config file, and someone asking what this is and how to fund it has
+    # neither. See about_dialog.py, vendored from stoatworks-backend/about.
+    if "--about" in raw:
+        print(about_text(__version__))
+        return 0
+
     if "--collect-diagnostics" in raw:
         diag.init(app=DIAG_APP, env_prefix=DIAG_ENV_PREFIX, version=__version__)
         # stdout, so it can be used in a script; logging went to stderr.
