@@ -35,8 +35,8 @@ so the same show file drives both the upload side (Nextcloud) and the edit side 
 
 | Build | Download | Size |
 | --- | --- | --- |
-| Apple Silicon · .dmg disk image | [`resolve-configurator-0.1.2-macos-arm64.dmg`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.2/resolve-configurator-0.1.2-macos-arm64.dmg) | 24 MB |
-| Apple Silicon · .pkg installer | [`resolve-configurator-0.1.2-macos-arm64.pkg`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.2/resolve-configurator-0.1.2-macos-arm64.pkg) | 9.8 MB |
+| Apple Silicon · .dmg disk image | [`resolve-configurator-0.1.2-macos-arm64.dmg`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.2/resolve-configurator-0.1.2-macos-arm64.dmg) | 20 MB |
+| Apple Silicon · .pkg installer | [`resolve-configurator-0.1.2-macos-arm64.pkg`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.2/resolve-configurator-0.1.2-macos-arm64.pkg) | 10 MB |
 | Apple Silicon · .zip archive | [`resolve-configurator-gui-macos-arm64.zip`](https://github.com/stoatworks-labs/resolve-configurator/releases/latest/download/resolve-configurator-gui-macos-arm64.zip) | 20 MB |
 
 </details>
@@ -67,7 +67,7 @@ Also in this release:
 
 All builds, checksums and release notes: [github.com/stoatworks-labs/resolve-configurator/releases](https://github.com/stoatworks-labs/resolve-configurator/releases).
 
-The Windows builds are unsigned, so SmartScreen warns once — see [Unsigned builds — macOS Gatekeeper & Windows SmartScreen](#unsigned-builds--macos-gatekeeper--windows-smartscreen) for the one-time click-through.
+The Windows builds are unsigned, so SmartScreen warns once — see [Windows SmartScreen](#windows-smartscreen) for the one-time click-through.
 
 <!-- downloads:end -->
 
