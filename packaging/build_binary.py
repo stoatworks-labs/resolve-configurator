@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import platform
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -58,8 +59,20 @@ def main() -> int:
     out.mkdir(exist_ok=True)
     archive = out / f"{NAME}-{target}"
     if system == "Darwin":
-        # Ship only the .app bundle (onedir also leaves a raw folder in dist/).
-        shutil.make_archive(str(archive), "zip", root_dir=str(dist), base_dir=f"{NAME}.app")
+        # ditto, not shutil.make_archive: make_archive FOLLOWS symlinks and
+        # stores copies, which silently destroys the .app. PyInstaller's bundle
+        # is full of them — Python.framework/Versions/Current, the top-level
+        # Python and Resources, base_library.zip — and a copy-flattened
+        # framework is both several MB larger and structurally invalid, so
+        # codesign rejects the whole app with "bundle format unrecognized".
+        # That shipped in v0.1.2 and could not be signed after the fact.
+        zip_path = archive.with_suffix(".zip")
+        zip_path.unlink(missing_ok=True)
+        subprocess.run(
+            ["ditto", "-c", "-k", "--keepParent", "--sequesterRsrc",
+             str(dist / f"{NAME}.app"), str(zip_path)],
+            check=True,
+        )
     else:
         shutil.make_archive(str(archive), "zip", root_dir=str(dist))
     print(f"wrote {archive.with_suffix('.zip')}")
