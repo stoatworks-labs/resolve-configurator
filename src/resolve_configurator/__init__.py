@@ -6,4 +6,4 @@ Public entry points:
 """
 
 #: The one place the version is written down; pyproject.toml reads it.
-__version__ = "0.1.2"
+__version__ = "0.1.3"
