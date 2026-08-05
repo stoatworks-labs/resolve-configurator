@@ -11,13 +11,52 @@ from __future__ import annotations
 
 import platform
 import shutil
+import stat
 import subprocess
+import zipfile
 import sys
 from pathlib import Path
 
 import PyInstaller.__main__
 
 NAME = "resolve-configurator-gui"
+
+
+
+def _assert_symlinks_survived(zip_path: Path) -> None:
+    """Fail the build if the macOS .app came out symlink-flattened.
+
+    The bug this guards was not caught by anything: `shutil.make_archive`
+    follows symlinks and stores copies, so `Python.framework/Versions/Current`
+    arrives as a *directory*. The zip is valid, the app launches from Finder,
+    and only `codesign` objects -- with "bundle format unrecognized, invalid, or
+    unsuitable", naming the framework rather than the zip. That shipped in
+    v0.1.2 and could not be signed after the fact, because by then the structure
+    was already gone.
+
+    A zip records the unix mode in the top 16 bits of `external_attr`, so
+    whether a symlink survived is readable without extracting anything.
+    """
+    with zipfile.ZipFile(zip_path) as archive:
+        entries = archive.infolist()
+        links = [e for e in entries
+                 if stat.S_ISLNK(e.external_attr >> 16)]
+        flattened = [e.filename for e in entries
+                     if "/Versions/Current/" in e.filename]
+
+    if flattened:
+        raise SystemExit(
+            f"{zip_path.name}: Versions/Current was stored as a real directory "
+            f"({len(flattened)} entries under it) -- the framework has been "
+            f"symlink-flattened and codesign will reject the app. "
+            f"Zip it with ditto, not shutil.make_archive."
+        )
+    if not links:
+        raise SystemExit(
+            f"{zip_path.name}: contains no symlinks at all. A PyInstaller .app "
+            f"is full of them, so this bundle has been flattened and codesign "
+            f"will reject it."
+        )
 
 
 def main() -> int:
@@ -73,6 +112,9 @@ def main() -> int:
              str(dist / f"{NAME}.app"), str(zip_path)],
             check=True,
         )
+        # Proving it worked is the point: the flattened bundle is a valid zip
+        # that launches, so nothing downstream notices until codesign.
+        _assert_symlinks_survived(zip_path)
     else:
         shutil.make_archive(str(archive), "zip", root_dir=str(dist))
     print(f"wrote {archive.with_suffix('.zip')}")
