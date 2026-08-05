@@ -19,7 +19,7 @@ jobs:
           python-version: "3.12"
       - run: pip install build
       - run: python -m build
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: python-dist
           path: dist/*
@@ -68,7 +68,7 @@ jobs:
             echo "no .app bundle found in dist/, skipping installers"
           fi
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: gui-${{ matrix.target }}
           path: |
@@ -109,7 +109,7 @@ jobs:
           rl_nsis windows-x64 "$stage" --gui "resolve-configurator-gui.exe"
           ls -l installers
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: resolve-configurator-windows-installer
           path: installers/*
