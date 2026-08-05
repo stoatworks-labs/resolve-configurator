@@ -6,11 +6,11 @@ import argparse
 import sys
 
 from . import __version__, diag
+from .about_dialog import about_text
 from .config import ConfigError, load_config
 from .core import execute
 from .csv_reader import CsvError, read_csv
 from .resolve_api import ResolveError
-from .about_dialog import about_text
 
 
 def run(

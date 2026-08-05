@@ -13,8 +13,8 @@ import platform
 import shutil
 import stat
 import subprocess
-import zipfile
 import sys
+import zipfile
 from pathlib import Path
 
 import PyInstaller.__main__
