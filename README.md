@@ -28,15 +28,15 @@ so the same show file drives both the upload side (Nextcloud) and the edit side 
 
 ## Download
 
-**[v0.1.3](https://github.com/stoatworks-labs/resolve-configurator/releases/tag/v0.1.3)** — prebuilt for macOS, Windows and Linux. Pick your platform:
+**[v0.1.4](https://github.com/stoatworks-labs/resolve-configurator/releases/tag/v0.1.4)** — prebuilt for macOS, Windows and Linux. Pick your platform:
 
 <details>
 <summary><b>macOS</b> — Apple Silicon</summary>
 
 | Build | Download | Size |
 | --- | --- | --- |
-| Apple Silicon · .dmg disk image | [`resolve-configurator-0.1.3-macos-arm64.dmg`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.3/resolve-configurator-0.1.3-macos-arm64.dmg) | 19 MB |
-| Apple Silicon · .pkg installer | [`resolve-configurator-0.1.3-macos-arm64.pkg`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.3/resolve-configurator-0.1.3-macos-arm64.pkg) | 9.8 MB |
+| Apple Silicon · .dmg disk image | [`resolve-configurator-0.1.4-macos-arm64.dmg`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.4/resolve-configurator-0.1.4-macos-arm64.dmg) | 19 MB |
+| Apple Silicon · .pkg installer | [`resolve-configurator-0.1.4-macos-arm64.pkg`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.4/resolve-configurator-0.1.4-macos-arm64.pkg) | 9.8 MB |
 | Apple Silicon · .zip archive | [`resolve-configurator-gui-macos-arm64.zip`](https://github.com/stoatworks-labs/resolve-configurator/releases/latest/download/resolve-configurator-gui-macos-arm64.zip) | 11 MB |
 
 </details>
@@ -46,7 +46,7 @@ so the same show file drives both the upload side (Nextcloud) and the edit side 
 
 | Build | Download | Size |
 | --- | --- | --- |
-| x64 · .exe installer | [`resolve-configurator-0.1.3-windows-x64-setup.exe`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.3/resolve-configurator-0.1.3-windows-x64-setup.exe) | 11 MB |
+| x64 · .exe installer | [`resolve-configurator-0.1.4-windows-x64-setup.exe`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.4/resolve-configurator-0.1.4-windows-x64-setup.exe) | 11 MB |
 | x64 · .zip archive | [`resolve-configurator-gui-windows-x64.zip`](https://github.com/stoatworks-labs/resolve-configurator/releases/latest/download/resolve-configurator-gui-windows-x64.zip) | 11 MB |
 
 </details>
@@ -62,8 +62,8 @@ so the same show file drives both the upload side (Nextcloud) and the edit side 
 
 Also in this release:
 
-- [`resolve_configurator-0.1.3-py3-none-any.whl`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.3/resolve_configurator-0.1.3-py3-none-any.whl) — Python wheel (pip install), 53 KB
-- [`resolve_configurator-0.1.3.tar.gz`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.3/resolve_configurator-0.1.3.tar.gz) — Source tarball, 56 KB
+- [`resolve_configurator-0.1.4-py3-none-any.whl`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.4/resolve_configurator-0.1.4-py3-none-any.whl) — Python wheel (pip install), 53 KB
+- [`resolve_configurator-0.1.4.tar.gz`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.4/resolve_configurator-0.1.4.tar.gz) — Source tarball, 56 KB
 
 All builds, checksums and release notes: [github.com/stoatworks-labs/resolve-configurator/releases](https://github.com/stoatworks-labs/resolve-configurator/releases).
 
