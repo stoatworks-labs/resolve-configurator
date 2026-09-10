@@ -118,6 +118,41 @@ def _assert_symlinks_survived(zip_path: Path) -> None:
         )
 
 
+def _verify_universal(app: Path) -> None:
+    """Assert every Mach-O in the bundle carries both slices.
+
+    Checking only the main executable is not enough: a universal wrapper around
+    a thin nested binary still fails on whichever architecture it lacks, and
+    only when a user on that architecture runs it. The fleet has shipped exactly
+    that mistake -- RFutils embedded an arm64 Node runtime in its Intel build.
+
+    A bundle with nothing to check is a failure too, not a pass, since that
+    means the walk found nothing and proved nothing.
+    """
+    checked = 0
+    for path in sorted(app.rglob("*")):
+        if not path.is_file() or path.is_symlink():
+            continue
+        probe = subprocess.run(
+            ["lipo", "-archs", str(path)], capture_output=True, text=True
+        )
+        if probe.returncode != 0:
+            continue  # not a Mach-O; lipo says so and we move on
+        archs = probe.stdout.split()
+        if not archs:
+            continue
+        checked += 1
+        missing = {"arm64", "x86_64"} - set(archs)
+        if missing:
+            raise SystemExit(
+                f"{path.relative_to(app)} is not universal: has {' '.join(archs)}, "
+                f"missing {' '.join(sorted(missing))}"
+            )
+    if checked == 0:
+        raise SystemExit(f"{app}: found no Mach-O to check, so nothing was proved")
+    print(f"verified universal: {checked} Mach-O file(s) carry arm64 + x86_64")
+
+
 def main() -> int:
     if len(sys.argv) != 2:
         print("usage: build_binary.py <target-label>", file=sys.stderr)
@@ -144,7 +179,15 @@ def main() -> int:
     if system == "Darwin":
         # A macOS .app is a directory bundle, so onefile can't apply; --windowed
         # onedir produces dist/<name>.app.
-        args += ["--windowed", "--onedir"]
+        #
+        # universal2 so ONE build serves both Apple Silicon and Intel. This used
+        # to produce an arm64-only bundle while the .pkg wrapped around it
+        # declared hostArchitectures="arm64,x86_64" -- so it installed happily on
+        # an Intel Mac and then would not launch. It needs a fat interpreter and
+        # fat binary dependencies; CPython from setup-python is universal2 and
+        # this package declares no dependencies, and PyInstaller raises rather
+        # than silently thinning if something is not fat.
+        args += ["--windowed", "--onedir", "--target-architecture", "universal2"]
     elif system == "Windows":
         # Single no-console .exe.
         args += ["--windowed", "--onefile"]
@@ -161,6 +204,9 @@ def main() -> int:
         # Before the zip, so the zip, and the DMG and PKG that CI wraps around
         # the same dist/ app afterwards, all carry the real version.
         _stamp_version(app, _package_version(root))
+        # Before the zip for the same reason: nothing should leave here that
+        # cannot run on both architectures.
+        _verify_universal(app)
         # ditto, not shutil.make_archive: make_archive FOLLOWS symlinks and
         # stores copies, which silently destroys the .app. PyInstaller's bundle
         # is full of them — Python.framework/Versions/Current, the top-level
