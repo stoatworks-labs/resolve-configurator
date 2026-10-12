@@ -28,16 +28,16 @@ so one show file drives both the upload side (Nextcloud) and the edit side (Reso
 
 ## Download
 
-**[v0.1.5](https://github.com/stoatworks-labs/resolve-configurator/releases/tag/v0.1.5)** — prebuilt for macOS, Windows and Linux. Pick your platform:
+**[v0.1.6](https://github.com/stoatworks-labs/resolve-configurator/releases/tag/v0.1.6)** — prebuilt for macOS, Windows and Linux. Pick your platform:
 
 <details>
-<summary><b>macOS</b> — Apple Silicon</summary>
+<summary><b>macOS</b> — Universal (Apple Silicon + Intel)</summary>
 
 | Build | Download | Size |
 | --- | --- | --- |
-| Apple Silicon · .dmg disk image | [`resolve-configurator-0.1.5-macos-arm64.dmg`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.5/resolve-configurator-0.1.5-macos-arm64.dmg) | 19 MB |
-| Apple Silicon · .pkg installer | [`resolve-configurator-0.1.5-macos-arm64.pkg`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.5/resolve-configurator-0.1.5-macos-arm64.pkg) | 9.8 MB |
-| Apple Silicon · .zip archive | [`resolve-configurator-gui-macos-arm64.zip`](https://github.com/stoatworks-labs/resolve-configurator/releases/latest/download/resolve-configurator-gui-macos-arm64.zip) | 11 MB |
+| Universal (Apple Silicon + Intel) · .dmg disk image | [`resolve-configurator-0.1.6-macos-universal.dmg`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.6/resolve-configurator-0.1.6-macos-universal.dmg) | 35 MB |
+| Universal (Apple Silicon + Intel) · .pkg installer | [`resolve-configurator-0.1.6-macos-universal.pkg`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.6/resolve-configurator-0.1.6-macos-universal.pkg) | 17 MB |
+| Universal (Apple Silicon + Intel) · .zip archive | [`resolve-configurator-gui-macos-universal.zip`](https://github.com/stoatworks-labs/resolve-configurator/releases/latest/download/resolve-configurator-gui-macos-universal.zip) | 18 MB |
 
 </details>
 
@@ -46,7 +46,7 @@ so one show file drives both the upload side (Nextcloud) and the edit side (Reso
 
 | Build | Download | Size |
 | --- | --- | --- |
-| x64 · .exe installer | [`resolve-configurator-0.1.5-windows-x64-setup.exe`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.5/resolve-configurator-0.1.5-windows-x64-setup.exe) | 11 MB |
+| x64 · .exe installer | [`resolve-configurator-0.1.6-windows-x64-setup.exe`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.6/resolve-configurator-0.1.6-windows-x64-setup.exe) | 11 MB |
 | x64 · .zip archive | [`resolve-configurator-gui-windows-x64.zip`](https://github.com/stoatworks-labs/resolve-configurator/releases/latest/download/resolve-configurator-gui-windows-x64.zip) | 11 MB |
 
 </details>
@@ -59,6 +59,11 @@ so one show file drives both the upload side (Nextcloud) and the edit side (Reso
 | x64 · .zip archive | [`resolve-configurator-gui-linux-x64.zip`](https://github.com/stoatworks-labs/resolve-configurator/releases/latest/download/resolve-configurator-gui-linux-x64.zip) | 24 MB |
 
 </details>
+
+Also in this release:
+
+- [`resolve_configurator-0.1.6-py3-none-any.whl`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.6/resolve_configurator-0.1.6-py3-none-any.whl) — Python wheel (pip install), 52 KB
+- [`resolve_configurator-0.1.6.tar.gz`](https://github.com/stoatworks-labs/resolve-configurator/releases/download/v0.1.6/resolve_configurator-0.1.6.tar.gz) — Source tarball, 56 KB
 
 All builds, checksums and release notes: [github.com/stoatworks-labs/resolve-configurator/releases](https://github.com/stoatworks-labs/resolve-configurator/releases).
 
