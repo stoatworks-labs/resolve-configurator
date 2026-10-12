@@ -118,9 +118,10 @@ pip install -e .
 ```
 
 Prebuilt **standalone GUI apps** (no Python needed) are attached to each
-[GitHub Release](https://github.com/stoatworks-labs/resolve-configurator/releases): macOS (Apple Silicon),
-Windows x64 and Linux x64, next to the `wheel`/`sdist`. On an Intel Mac, install via `pip`. The apps are
-unsigned; [Unsigned builds](#unsigned-builds--macos-gatekeeper--windows-smartscreen) has the fix.
+[GitHub Release](https://github.com/stoatworks-labs/resolve-configurator/releases): macOS (universal since
+v0.1.6, so Intel Macs too), Windows x64 and Linux x64, next to the `wheel`/`sdist`. The macOS apps are
+Developer ID-signed and notarised; the Windows ones aren't, and [Windows SmartScreen](#windows-smartscreen)
+has the one-time click-through.
 
 ## Use — external CLI (Studio)
 
