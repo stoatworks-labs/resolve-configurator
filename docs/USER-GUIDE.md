@@ -1,10 +1,10 @@
 # Resolve Configurator user guide
 
-Scaffolding a DaVinci Resolve project for a multi-theatre event — bins, timelines, asset
-imports and smart-bin recipes — from the session CSV.
+Resolve Configurator sets up a DaVinci Resolve project for a multi-theatre event (bins, timelines,
+asset imports and smart-bin recipes) from the session CSV.
 
 The [README](../README.md) covers install and the three ways to run it (external CLI, desktop
-GUI, and Resolve's own Scripts menu). This is what to do with it, and what to check.
+GUI, and Resolve's own Scripts menu). This guide is about what to do with it, and what to check.
 
 ---
 
@@ -20,7 +20,7 @@ nc-filedropbatch    resolve-configurator
 (collects uploads)  (builds the Resolve project)
 ```
 
-Keep one file, feed it to both. Bin and timeline names here use **the same sanitiser** as the
+Keep one file and feed it to both. Bin and timeline names here use **the same sanitiser** as the
 upload folders, so `09:30 - Jane Smith` names the same thing in both places.
 
 Five columns, matched case-insensitively:
@@ -29,7 +29,7 @@ Five columns, matched case-insensitively:
 Date, Theatre, Start Time, presenter name, presenter email
 ```
 
-**A missing required column is a hard error** — nothing is built, so a rejected CSV is safe to
+**A missing required column is a hard error** and nothing gets built, so a rejected CSV is safe to
 fix and retry.
 
 ---
@@ -38,7 +38,7 @@ fix and retry.
 
 ![The Resolve Configurator window: the session table at the top, project settings below it, the per-theatre asset lists, and the dry-run output filling the bottom pane.](screenshots/app-loaded.png)
 
-Everything comes off one screen: load the session CSV, set the project name, frame rate and
+Everything happens on one screen: load the session CSV, set the project name, frame rate and
 resolution, attach backgrounds and PiP images per theatre, then either **Dry run** or **Apply to
 Resolve**.
 
@@ -48,15 +48,15 @@ Resolve**.
 
 ![Dry-run output: the project name with create_if_missing, the settings that will be applied, and the media-pool tree it intends to build.](screenshots/app-dry-run.png)
 
-*The dry run prints the whole plan — the resolved project name, every setting, and the bin tree
-down to each session — without touching Resolve.*
+*The dry run prints the whole plan (the resolved project name, every setting, and the bin tree
+down to each session) without touching Resolve.*
 
 ```bash
 resolve-configure sessions.csv --config project.toml --dry-run
 ```
 
 `--dry-run` **never touches Resolve.** It prints the planned structure and **still writes the
-smart-bin recipes** — so it's also the way to get the rules without building anything.
+smart-bin recipes**, so it's also how you get the rules without building anything.
 
 Use it to check the bin tree, the timeline names and the derived session windows before you let
 it near a real project.
@@ -64,24 +64,24 @@ it near a real project.
 ---
 
 ## Session end times are derived, not read
-The CSV has a start time and no end time. **A session ends when the next one on that theatre and
-day starts.**
+The CSV has a start time and no end time. **A session ends when the next one in that theatre on
+that day starts.**
 
-Two consequences:
+Two things follow from that:
 
-- **A gap in the schedule becomes part of the preceding session's window.** An hour's break after
-  a 30-minute talk gives that talk a 90-minute timecode range.
-- **`default_session_minutes` applies to exactly one session per theatre per day** — the last
-  one, which has no "next" to end it. Setting it doesn't change any other session's length.
+- **A gap in the schedule becomes part of the session before it.** An hour's break after a
+  30-minute talk gives that talk a 90-minute timecode range.
+- **`default_session_minutes` only applies to one session per theatre per day**: the last one,
+  which has no "next" to end it. Setting it doesn't change any other session's length.
 
-If the derived windows look wrong, that's the rule to check first — not the config.
+If the derived windows look wrong, check that rule first, before the config.
 
 ---
 
 ## The smart-bin rules assume time-of-day timecode
-Resolve's scripting API **cannot create smart bins**, and at build time the recordings don't
-exist in the media pool anyway. So the tool writes `smart-bins.md` and `smart-bins.json` with the
-exact rules to recreate each one **by hand, once**:
+Resolve's scripting API **can't create smart bins**, and at build time the recordings aren't in
+the media pool anyway. So the tool writes `smart-bins.md` and `smart-bins.json` with the rules you
+need to recreate each one **by hand, once**:
 
 | Field | Operator | Value |
 |---|---|---|
@@ -90,16 +90,16 @@ exact rules to recreate each one **by hand, once**:
 | Start TC | is in the range | session start … session end |
 
 > **The Start TC rule only works if your recorders are jammed to time-of-day timecode.** If
-> they're free-running or reset per card, the rule matches nothing and the smart bin looks empty
-> — which is a recorder configuration problem, not a tool problem.
+> they're free-running or reset per card, the rule matches nothing and the smart bin looks empty.
+> That's a recorder configuration problem, not a tool problem.
 
-Confirm timecode jam **before** the event, not when you're looking for a missing session.
+Check the timecode jam **before** the event, not when you're hunting for a missing session.
 
 ---
 
 ## Read the run summary
-Three kinds of imperfect row still produce output, on purpose — a partial build is more useful
-than a refusal — and each one leaves a gap that looks fine until you use it:
+Three kinds of imperfect row still produce output, on purpose (a partial build is more useful
+than a refusal), and each one leaves a gap that looks fine until you use it:
 
 | Situation | What you get | What's missing |
 |---|---|---|
@@ -108,17 +108,18 @@ than a refusal — and each one leaves a gap that looks fine until you use it:
 | **Theatre not in `[drives]`** | bins and timelines as normal | **no File Path rule** in that recipe |
 
 All three are reported in the summary. **A recipe with a missing drive or timecode rule will
-still import cleanly and quietly over-match.**
+still import cleanly, and then over-match without telling you.**
 
 ---
 
 ## Assets and project settings
-**Asset paths in the config are relative to the config file**, not to where you run the command.
+**Asset paths in the config are relative to the config file**, not to wherever you run the
+command.
 
-**`[project.settings]` is a verbatim passthrough** to Resolve's `SetSetting()` — anything you put
+**`[project.settings]` is a straight passthrough** to Resolve's `SetSetting()`. Anything you put
 there is applied without validation, so a misspelled key or an unsupported value is **silently
 ignored by Resolve**. If a setting didn't take, check the spelling against Resolve's own setting
-names before suspecting the tool.
+names before you blame the tool.
 
 `frame_rate` is a **string** using Resolve's own values (`"25"`, `"23.976"`), not a number.
 
@@ -127,18 +128,18 @@ names before suspecting the tool.
 ---
 
 ## Re-running
-**Safe.** Bins are found-or-created, and timelines already present are skipped by name. Add
-sessions to the CSV, run again, and only the new ones are created.
+**Safe.** Bins are found or created, and timelines that already exist are skipped by name. Add
+sessions to the CSV, run it again, and only the new ones get created.
 
-Timeline name collisions are auto-disambiguated by appending `[theatre date]`.
+Timeline name collisions are sorted out automatically by appending `[theatre date]`.
 
 ---
 
 ## Requirements worth knowing before the day
-- **Python 3.11+** — no third-party runtime dependencies.
+- **Python 3.11+**, with no third-party runtime dependencies.
 - **DaVinci Resolve Studio** to apply a build from outside Resolve. External scripting is a
   Studio feature. **The free version can only run this from Resolve's own Workspace → Scripts
-  menu** — which works, but is a different route with a different setup.
+  menu**, which works, but it's a different route with a different setup.
 
 ---
 
@@ -162,6 +163,6 @@ Timeline name collisions are auto-disambiguated by appending `[theatre date]`.
 
 ## See also
 
-- [API.md](API.md) — CLI flags, the full TOML schema, the CSV contract, the recipe format
-- [DEVELOPING.md](DEVELOPING.md) — tests and the dry-run pattern
-- [README](../README.md) — install and the three ways to run it
+- [API.md](API.md): CLI flags, the full TOML schema, the CSV contract, the recipe format
+- [DEVELOPING.md](DEVELOPING.md): tests and the dry-run pattern
+- [README](../README.md): install and the three ways to run it

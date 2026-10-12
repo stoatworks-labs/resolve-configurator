@@ -2,27 +2,27 @@
 
 > **AI-assisted project.** This codebase was created with [Claude Code](https://claude.com/claude-code)
 > (Anthropic), directed and reviewed by a human author — including the code, the docs, and the config.
-> Review it yourself before relying on it in production, same as you would for any code.
+> Check it over yourself before you rely on it in production, as you would with any code.
 
-Scaffold a **DaVinci Resolve** project for a multi-theatre event from the *same CSV* the
+Set up a **DaVinci Resolve** project for a multi-theatre event from the *same CSV* the
 [nc-filedropbatch](https://github.com/stoatworks-labs/nc-filedropbatch) Nextcloud app uses to collect presenter
-uploads. Point it at your sessions list plus a small config (frame rate, resolution, record-drive map, asset
+uploads. Point it at your sessions list and a small config (frame rate, resolution, record-drive map, asset
 manifest) and it builds:
 
-- the **project format** — frame rate, resolution, and any other project setting you name;
+- the **project format**: frame rate, resolution, and any other project setting you name;
 - a **media-pool bin per theatre and per day** (`Theatre / Date`);
 - an **empty timeline per session** inside each day's bin (`Start Time - Presenter`);
-- prepopulated **backgrounds** (for PiP looks) and **holding/title slides**, global or per-theatre;
-- a **smart-bin recipe** — the exact rule set to filter each day's recordings down to one session, by record
-  drive, date, and timecode window.
+- **backgrounds** (for PiP looks) and **holding/title slides**, already in place, global or per theatre;
+- a **smart-bin recipe**: the rule set that filters each day's recordings down to one session, by record
+  drive, date and timecode window.
 
-The input CSV is unchanged from nc-filedropbatch:
+The input CSV is the same one nc-filedropbatch uses:
 
 ```
 Date, Theatre, Start Time, presenter name, presenter email
 ```
 
-so the same show file drives both the upload side (Nextcloud) and the edit side (Resolve).
+so one show file drives both the upload side (Nextcloud) and the edit side (Resolve).
 
 <!-- downloads:start -->
 
@@ -71,20 +71,20 @@ macOS builds are signed and notarised and open normally. The Windows builds are 
 ![The Resolve Configurator editor: an editable sessions table, project settings, and per-theatre asset panels](docs/screenshots/app-loaded.png)
 
 *Edit sessions row by row (or Load a CSV), set the project format, then Sync theatres and browse background /
-PiP / slide images per theatre. Grey-on-grey to match Resolve.*
+PiP / slide images per theatre. It's grey-on-grey to match Resolve.*
 
 ![A dry run showing the planned media-pool tree in the output pane](docs/screenshots/app-dry-run.png)
 
-*A Dry run previews the exact project format, media-pool bins, per-theatre asset bins, and per-session
-timelines in the output pane before anything touches Resolve — real output on the bundled sample data.*
+*A Dry run previews the project format, media-pool bins, per-theatre asset bins and per-session timelines in
+the output pane before anything touches Resolve. That's actual output on the bundled sample data.*
 
 ## Why a "recipe" and not real smart bins?
 
-DaVinci Resolve's scripting API **cannot create smart bins** (confirmed for v20/v21 — you can create regular
-bins, timelines, and import media, but smart-bin definitions are a UI/database artifact). And at build time the
-recordings don't exist in the pool yet, so there are no clips to tag. So the tool builds everything the API
-*can* do and writes a `smart-bins.md` / `smart-bins.json` with the precise rules to recreate each smart bin
-once, by hand. Each session's rules are:
+DaVinci Resolve's scripting API **can't create smart bins** (confirmed for v20/v21: you can create regular
+bins and timelines and import media, but smart-bin definitions are a UI/database artifact the API doesn't
+reach). And at build time the recordings aren't in the pool yet, so there are no clips to tag. So the tool
+builds everything the API *can* do and writes a `smart-bins.md` / `smart-bins.json` with the rules you need
+to recreate each smart bin once, by hand. Each session's rules are:
 
 | Field | Operator | Value |
 | --- | --- | --- |
@@ -92,8 +92,9 @@ once, by hand. Each session's rules are:
 | Date Created | is | *session date* |
 | Start TC | is in the range | *session start .. session end* |
 
-The timecode window is **derived**: a session ends when the next one on that theatre/day starts; the last
-session of the day uses `default_session_minutes`. Rules assume recorders are jammed to **time-of-day timecode**.
+The timecode window is **worked out**: a session ends when the next one in that theatre on that day starts,
+and the last session of the day uses `default_session_minutes`. The rules assume the recorders are jammed to
+**time-of-day timecode**.
 
 ## Documentation
 
@@ -105,10 +106,10 @@ session of the day uses `default_session_minutes`. Rules assume recorders are ja
 
 ## Requirements
 
-- **Python 3.11+** (uses the stdlib `tomllib`; no third-party runtime dependencies).
-- **DaVinci Resolve Studio** to apply a build to Resolve. External scripting is a *Studio* feature — the free
+- **Python 3.11+** (it uses the stdlib `tomllib`; no third-party runtime dependencies).
+- **DaVinci Resolve Studio** to apply a build to Resolve. External scripting is a *Studio* feature; the free
   version can only run scripts from Resolve's own **Workspace → Scripts** menu/Console.
-- No Resolve at all is needed for `--dry-run`, which prints the full plan and still writes the recipe.
+- You don't need Resolve at all for `--dry-run`, which prints the full plan and still writes the recipe.
 
 ## Install
 
@@ -118,8 +119,8 @@ pip install -e .
 
 Prebuilt **standalone GUI apps** (no Python needed) are attached to each
 [GitHub Release](https://github.com/stoatworks-labs/resolve-configurator/releases): macOS (Apple Silicon),
-Windows x64, and Linux x64, alongside the `wheel`/`sdist`. Intel-Mac users install via `pip`. The apps are
-unsigned — see [Unsigned builds](#unsigned-builds--macos-gatekeeper--windows-smartscreen) for the fix.
+Windows x64 and Linux x64, next to the `wheel`/`sdist`. On an Intel Mac, install via `pip`. The apps are
+unsigned; [Unsigned builds](#unsigned-builds--macos-gatekeeper--windows-smartscreen) has the fix.
 
 ## Use — external CLI (Studio)
 
@@ -127,12 +128,12 @@ unsigned — see [Unsigned builds](#unsigned-builds--macos-gatekeeper--windows-s
 resolve-configure sessions.csv --config project.toml
 ```
 
-With Resolve running, this creates/loads the project, applies the settings, builds the bins/timelines, imports
-the assets, and writes the recipe. Flags:
+With Resolve running, this creates or loads the project, applies the settings, builds the bins and
+timelines, imports the assets and writes the recipe. Flags:
 
-- `--dry-run` — never touch Resolve; print the planned tree and write the recipe. **Start here.**
-- `--project-name NAME` — override `[project].name` from the config.
-- `--recipe-out DIR` — where to write `smart-bins.md` / `smart-bins.json` (default: current dir).
+- `--dry-run`: never touches Resolve; prints the planned tree and writes the recipe. **Start here.**
+- `--project-name NAME`: overrides `[project].name` from the config.
+- `--recipe-out DIR`: where to write `smart-bins.md` / `smart-bins.json` (default: current dir).
 
 Try it now, no Resolve needed:
 
@@ -146,19 +147,20 @@ resolve-configure sample-sessions.csv --config project.example.toml --dry-run --
 resolve-configure-gui
 ```
 
-A Tkinter editor (styled grey-on-grey to sit next to Resolve) that builds the whole show without touching a
-file by hand:
+A Tkinter editor (grey-on-grey, so it sits happily next to Resolve) that builds the whole show without you
+touching a file by hand:
 
-- **Sessions** — edit rows directly (Add row / delete / Clear), or **Load CSV** to import an existing show, or
+- **Sessions:** edit rows directly (Add row / delete / Clear), **Load CSV** to import an existing show, or
   **Export CSV** to save one out.
-- **Project settings** — project name, frame rate, resolution, default session length; **Load/Save config**
+- **Project settings:** project name, frame rate, resolution, default session length. **Load/Save config**
   round-trips a `project.toml` for the CLI.
-- **Assets** — click **Sync theatres from sessions** to get a panel per theatre (plus a Global panel), each with
-  a record-drive field and **Backgrounds / PiP / Slides** image lists you populate with a native file browser.
+- **Assets:** click **Sync theatres from sessions** to get a panel per theatre (plus a Global panel), each
+  with a record-drive field and **Backgrounds / PiP / Slides** image lists you fill from a native file
+  browser.
 - **Dry run** previews the plan in the output pane; **Apply to Resolve** builds it.
 
 Everything except the actual apply works with no Resolve installed, so you can prepare and preview a show
-anywhere. Needs Tk (bundled with python.org builds; on Homebrew Python install `python-tk`).
+anywhere. It needs Tk (bundled with python.org builds; on Homebrew Python, install `python-tk`).
 
 ## Use — in-app Scripts menu (free or Studio)
 
@@ -180,25 +182,26 @@ It reads its inputs from environment variables (with sensible fallbacks):
 
 ## Configuration
 
-See [`project.example.toml`](project.example.toml) for a fully-commented example. Highlights:
+See [`project.example.toml`](project.example.toml) for a fully commented example. The highlights:
 
-- `[project.format]` — `frame_rate`, `width`, `height`.
-- `[project.settings]` — an **optional passthrough**: every key here is applied verbatim via
+- `[project.format]`: `frame_rate`, `width`, `height`.
+- `[project.settings]`: an **optional passthrough**. Every key here is applied as-is via
   `Project.SetSetting()`, so you can set *any* project setting (colour science, monitor format, …) without a
   code change.
-- `[drives]` — `Theatre = "RECORD_DRIVE_NAME"`, used in the smart-bin recipe.
-- `[[assets]]` — one entry per file to import; `scope = "global"` → `Assets/<bin>`, or `theatre = "Globe"` →
+- `[drives]`: `Theatre = "RECORD_DRIVE_NAME"`, used in the smart-bin recipe.
+- `[[assets]]`: one entry per file to import; `scope = "global"` → `Assets/<bin>`, or `theatre = "Globe"` →
   `Globe/Assets/<bin>`.
 
 ## Behaviour notes
 
 - Rows are de-duplicated on `Theatre + Date + Start Time` (the same key nc-filedropbatch matches on).
-- Bin/timeline names use the same sanitiser as nc-filedropbatch — forbidden characters like `:` and `/` are
-  *replaced* (not stripped), so `09:30` becomes `09-30` and distinct inputs never collide.
-- Rows with an unparseable start time still get a timeline (named from the raw value); they just get no
-  timecode rule in the recipe. Missing theatre → an `untitled` bin. All of this is reported in the run summary.
-- Re-running against an existing project is safe: bins are found-or-created and timelines already present are
-  skipped by name.
+- Bin and timeline names use the same sanitiser as nc-filedropbatch: forbidden characters like `:` and `/`
+  are *replaced* (not stripped), so `09:30` becomes `09-30` and distinct inputs never collide.
+- Rows with a start time that won't parse still get a timeline (named from the raw value); they just get no
+  timecode rule in the recipe. A missing theatre gets an `untitled` bin. All of this is reported in the run
+  summary.
+- Re-running against an existing project is safe: bins are found or created, and timelines that are already
+  there are skipped by name.
 
 ## Development
 
@@ -210,15 +213,15 @@ ruff check .
 
 ## Windows SmartScreen
 
-macOS builds are **Developer ID-signed and notarised by Apple** — they open
+macOS builds are **Developer ID-signed and notarised by Apple**, so they open
 normally, with no Gatekeeper warning and no quarantine step. The Windows
-binaries are **not** code-signed, so Windows still warns you the first time.
+binaries **aren't** code-signed, so Windows still warns you the first time.
 
-- **Windows** — SmartScreen shows *"Windows protected your PC"* →
+- **Windows**: SmartScreen shows *"Windows protected your PC"* →
   **More info** → **Run anyway**.
-- **Linux** — no signing gate.
+- **Linux**: no signing gate.
 
-Per-artifact steps, self-signing and checksum verification:
+Per-artifact steps, self-signing and checksum verification are in
 **[docs/UNSIGNED.md](docs/UNSIGNED.md)**.
 
 ## License
