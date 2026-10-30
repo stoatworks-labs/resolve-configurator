@@ -39,7 +39,7 @@ jobs:
           # release-lib produces declared hostArchitectures="arm64,x86_64" and
           # so installed on them anyway. build_binary.py now builds universal2
           # and refuses to zip a bundle that is not fat throughout.
-          - os: macos-14
+          - os: macos-15
             target: macos-universal
     steps:
       - uses: actions/checkout@v7

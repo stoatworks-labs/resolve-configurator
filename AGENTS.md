@@ -73,7 +73,7 @@ instance. Keep it working, and prefer extending it over adding tests that need t
 ## 5. Conventions
 
 - Public repo. "Commit" means commit **and** push.
-- Multi-platform release CI; cross-compile macOS x86_64 on `macos-14` — never `macos-13`.
+- Multi-platform release CI; cross-compile macOS x86_64 on `macos-15` — never `macos-13`.
 
 ## 6. Related
 
