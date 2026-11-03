@@ -16,6 +16,8 @@ manifest) and it builds:
 - a **smart-bin recipe**: the rule set that filters each day's recordings down to one session, by record
   drive, date and timecode window.
 
+The [project page](https://stoatworks-labs.com/software/resolve-configurator/) has the downloads and the [user guide](https://stoatworks-labs.com/software/resolve-configurator/guide/).
+
 The input CSV is the same one nc-filedropbatch uses:
 
 ```
